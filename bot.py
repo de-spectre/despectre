@@ -71,6 +71,19 @@ async def ukraine(inter: nextcord.Interaction):
 # 
 
 
+@client.slash_command(name='join', description='Join voice channel', description_localizations={'uk': 'Підключити до голосового каналу', 'ru': 'Подключить к голосовому каналу'})
+async def join_cmd(inter: Interaction, channel: GuildChannel = SlashOption(channel_types=[ChannelType.voice], description='Select voice channel', required=True, description_localizations={'uk': 'Вибери голосовий канал', 'ru': 'Выбери голосовой канал'})):
+    if not inter.guild.voice_client:
+        await channel.connect()
+        await inter.send(f'Connected to {channel}')
+    else:
+        await inter.guild.voice_client.disconnect()
+        await channel.connect()
+        await inter.send(f'Connected to {channel}')
+
+
+
+
 
 @client.slash_command(dm_permission=False, name='play', description='Play music', description_localizations={'uk': 'Відтворення музики з YouTube', 'ru': 'Воспроизведение музыки из YouTube'})
 async def play(inter: nextcord.Interaction, query: str = SlashOption(name='search', description='Music to play', required=True, description_localizations={'uk': 'Назва музики', 'ru': 'Название музыки'})):
