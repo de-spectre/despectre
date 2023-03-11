@@ -53,6 +53,20 @@ async def on_ready():
 # 
 
 
+@client.slash_command(name='join', description='Join voice channel')
+async def join_cmd(inter: Interaction, channel: GuildChannel = SlashOption(channel_types=[ChannelType.voice], description='Select voice channel', required=True)):
+    if not inter.guild.voice_client:
+        await channel.connect()
+        await inter.send(f'Connected to {channel}')
+    else:
+        await inter.guild.voice_client.disconnect()
+        await channel.connect()
+        await inter.send(f'Connected to {channel}')
+
+
+
+
+
 
 @client.slash_command(dm_permission=False, name='ukraine', description='Glory to Ukraine', description_localizations={'uk': 'Показова кара #ХлопчикУТрусиках', 'ru': 'fuck russia'})
 async def ukraine(inter: nextcord.Interaction):
