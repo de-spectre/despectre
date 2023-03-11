@@ -3,9 +3,10 @@ from nextcord import Interaction, SlashOption, ChannelType
 from nextcord.abc import GuildChannel
 from nextcord.ext import commands
 
+import schedule
+
 import mafic
 
-import config
 
 
 class MyBot(commands.Bot):
@@ -33,11 +34,24 @@ async def on_ready():
     print(f'{client.user} started!')
 
 
+
 # 
 # 
 #  COMMANDS
 # 
 # 
+
+
+
+
+
+
+# 
+# 
+#   MUSIC
+# 
+# 
+
 
 
 @client.slash_command(dm_permission=False, name='ukraine', description='Glory to Ukraine', description_localizations={'uk': 'Показова кара #ХлопчикУТрусиках', 'ru': 'fuck russia'})
@@ -63,16 +77,7 @@ async def ukraine(inter: nextcord.Interaction):
     await inter.send('https://usagif.com/wp-content/uploads/2022/4hv9xm/ukrainian-waving-flag-1.gif')
 
 
-
-# 
-# 
-#   MUSIC
-# 
-# 
-
-
-
-@client.slash_command(dm_permission=False, name='play', description='Play music', description_localizations={'default': 'en', 'uk-UK': {'description': 'Відтворення музики з YouTube'}})
+@client.slash_command(dm_permission=False, name='play', description='Play music', description_localizations={'uk': 'Відтворення музики з YouTube', 'ru': 'Воспроизведение музыки из YouTube'})
 async def play(inter: nextcord.Interaction, query: str = SlashOption(name='search', description='Music to play', required=True, description_localizations={'uk': 'Назва музики', 'ru': 'Название музыки'})):
     if not inter.guild.voice_client:
         player = await inter.user.voice.channel.connect(cls=mafic.Player)
@@ -86,7 +91,7 @@ async def play(inter: nextcord.Interaction, query: str = SlashOption(name='searc
 
     track = tracks[0]
 
-    embed  = nextcord.Embed(title=f'{track.title}', color=config.BASE_COLOR)
+    embed  = nextcord.Embed(title=f'{track.title}')
     embed.set_author(name='Now playing:')
 
 
@@ -94,18 +99,10 @@ async def play(inter: nextcord.Interaction, query: str = SlashOption(name='searc
 
     await inter.send(embed=embed)
 
-
-@client.slash_command(name='leave', description='Leave voice channel', description_localizations={'uk': 'Вимкнути бота від голосового чату', 'ru': 'Отключить бота от голосового чата'})
-async def leave_cmd(inter: Interaction):
-    vc = inter.guild.voice_client
-
-    await vc.disconnect()
-    await inter.send('Disconnected')
+    
 
 
 
 
 
-
-
-client.run(config.TOKEN)
+client.run('MTA4Mzk1NjQxNTY3NDIwMDA3NA.GaB30v.OjY3rQ9xpX9qfLnDKBrusKh_x0YsiE114k-A2M')
