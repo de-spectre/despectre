@@ -72,7 +72,7 @@ async def ukraine(inter: nextcord.Interaction):
 
 
 
-@client.slash_command(dm_permission=False, name='play', description='Play music', description_localizations={'default': 'en', 'uk-UK': {'description': 'Відтворення музики з YouTube'}})
+@client.slash_command(dm_permission=False, name='play', description='Play music', description_localizations={'uk': 'Відтворення музики з YouTube', 'ru': 'Воспроизведение музыки из YouTube'})
 async def play(inter: nextcord.Interaction, query: str = SlashOption(name='search', description='Music to play', required=True, description_localizations={'uk': 'Назва музики', 'ru': 'Название музыки'})):
     if not inter.guild.voice_client:
         player = await inter.user.voice.channel.connect(cls=mafic.Player)
