@@ -40,22 +40,7 @@ async def on_ready():
 # 
 
 
-@client.slash_command(name='help', description='All commands')
-async def help_cmd(inter: Interaction):
 
-    embed=nextcord.Embed(title="All commands", color=0xb6ace3)
-    embed.set_author(name="[beta]")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/avatars/1058143525004390401/346701886fb5ff9902243c6ff4145496.png?size=1024")
-    embed.add_field(name="/help", value="Shows this list", inline=True)
-    embed.add_field(name="/stats [member]", value="User info", inline=True)
-
-    await inter.send(embed=embed)
-
-@client.slash_command(name='stats', description='Shows member stats')
-async def stats_cmd(inter: Interaction, member: nextcord.User):
-    embed=nextcord.Embed(title=f"{member.display_name}", description="", color=0xb6ace3)
-    embed.set_thumbnail(url=f"{member.avatar.url}")
-    await inter.send(embed=embed)
 
 
 
@@ -67,8 +52,8 @@ async def stats_cmd(inter: Interaction, member: nextcord.User):
 
 
 
-@client.slash_command(dm_permission=False)
-async def play(inter: nextcord.Interaction, query: str):
+@client.slash_command(dm_permission=False, name='play', description='Play music')
+async def play(inter: nextcord.Interaction, query: str = SlashOption(name='search', description='Music to play', required=True)):
     if not inter.guild.voice_client:
         player = await inter.user.voice.channel.connect(cls=mafic.Player)
     else:
@@ -81,15 +66,26 @@ async def play(inter: nextcord.Interaction, query: str):
 
     track = tracks[0]
 
+    embed  = nextcord.Embed(title=f'{track.title}', color=config.BASE_COLOR)
+    embed.set_author(name='Now playing:')
+
+
     await player.play(track)
 
-    await inter.send(f"Playing {track.title}.")
+    await inter.send(embed=embed)
+
+
+@client.slash_command(name='leave', description='Leave voice channel')
+async def leave_cmd(inter: Interaction):
+    vc = inter.guild.voice_client
+
+    await vc.disconnect()
+    await inter.send('Disconnected')
 
 
 
-# 
-#   AUTH
-# 
+
+
 
 
 client.run(config.TOKEN)
