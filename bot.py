@@ -3,6 +3,13 @@ from nextcord import Interaction, SlashOption, ChannelType
 from nextcord.abc import GuildChannel
 from nextcord.ext import commands
 
+import time
+
+import openai
+
+openai.api_key = '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'
+
+
 import mafic
 
 import config
@@ -118,6 +125,22 @@ async def leave_cmd(inter: Interaction):
 
 
 
+@client.slash_command(name='ask', description='Ask ChatGPT')
+async def ask_cmd(inter: nextcord.Interaction, msgprompt: str = SlashOption(name='prompt', description='Ask GPT', required=True)):
+
+    await inter.send(f'You asked me about {msgprompt}')
+
+    response = openai.Completion.create(
+        model = 'text-davinci-003',
+        prompt = msgprompt,
+        max_tokens = 200,
+        temperature = 0.5,
+        top_p = 1.0,
+        frequency_penalty = 0.5,
+        presence_penalty = 0.0,
+    )
+    
+    await inter.send(response['choices'][0]['text'])
 
 
 
