@@ -47,28 +47,6 @@ async def on_ready():
 # 
 
 
-@client.slash_command(dm_permission=False, name='ukraine', description='Glory to Ukraine', description_localizations={'uk': 'Показова кара #ХлопчикУТрусиках', 'ru': 'fuck russia'})
-async def ukraine(inter: nextcord.Interaction):
-
-    query = 'Гимн Украины — "Ще не вмерла України і слава, і воля"'
-
-    if not inter.guild.voice_client:
-        player = await inter.user.voice.channel.connect(cls=mafic.Player)
-    else:
-        player = inter.guild.voice_client
-
-    print(inter.guild.voice_client)
-    print(inter.user.voice.channel)
-
-
-    tracks = await player.fetch_tracks(query)
-
-    track = tracks[0]
-
-    await player.play(track)
-
-    await inter.send('https://usagif.com/wp-content/uploads/2022/4hv9xm/ukrainian-waving-flag-1.gif')
-
 
 
 # 
@@ -97,7 +75,7 @@ async def play(inter: nextcord.Interaction, query: str = SlashOption(name='searc
     if not inter.guild.voice_client:
         player = await inter.user.voice.channel.connect(cls=mafic.Player)
     else:
-        player = inter.guild.voice_client
+        player = inter.guild.voice_client.channel
 
     tracks = await player.fetch_tracks(query)
 
@@ -115,12 +93,6 @@ async def play(inter: nextcord.Interaction, query: str = SlashOption(name='searc
     await inter.send(embed=embed)
 
 
-@client.slash_command(name='leave', description='Leave voice channel', description_localizations={'uk': 'Вимкнути бота від голосового чату', 'ru': 'Отключить бота от голосового чата'})
-async def leave_cmd(inter: Interaction):
-    vc = inter.guild.voice_client
-
-    await vc.disconnect()
-    await inter.send('Disconnected')
 
 
 
