@@ -77,7 +77,21 @@ async def play(inter: nextcord.Interaction, query: str = SlashOption(name='searc
     else:
         player = inter.guild.voice_client.channel
 
-    tracks = await player.fetch_tracks(query)
+    try:
+        tracks = await player.fetch_tracks(query)
+    except:
+        player.disconnect()
+        
+        player = await inter.user.voice.channel.connect(cls=mafic.Player)
+        track = tracks[0]
+
+        embed  = nextcord.Embed(title=f'{track.title}', color=config.BASE_COLOR)
+        embed.set_author(name='Now playing:')
+        
+        await player.play(track)
+
+        await inter.send(embed=embed)
+
 
     if not tracks:
         return await inter.send("No tracks found.")
